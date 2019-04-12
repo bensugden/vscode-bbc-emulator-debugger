@@ -1,0 +1,139 @@
+{
+	"name": "bbc-emulator-debugger",
+	"displayName": "BBC Emulator Debugger",
+	"version": "0.1.0",
+	"publisher": "ben sugden",
+	"description": "VS Code Extension for Debugging BBC Emulator",
+	"author": {
+		"name": "Sugsoft",
+		"email": "benj@outlook.com"
+	},
+	"license": "MIT",
+	"keywords": [
+		"multi-root ready"
+	],
+	"engines": {
+		"vscode": "^1.30.0-insider",
+		"node": "^8.9.3"
+	},
+	"icon": "images/bbc_owl.png",
+	"categories": [
+		"Debuggers"
+	],
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-mock-debug.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Microsoft/vscode-mock-debug/issues"
+	},
+	"scripts": {
+		"prepublish": "tsc -p ./src",
+		"compile": "tsc -p ./src",
+		"tslint": "tslint ./src/**/*.ts",
+		"watch": "tsc -w -p ./src",
+		"test": "mocha -u tdd ./out/tests/",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"package": "vsce package",
+		"publish": "vsce publish"
+	},
+	"dependencies": {
+		"await-notify": "1.0.1",
+		"vscode-debugadapter": "1.33.0"
+	},
+	"devDependencies": {
+		"@types/mocha": "5.2.5",
+		"@types/node": "8.9.3",
+		"mocha": "5.2.0",
+		"tslint": "5.11.0",
+		"typescript": "3.1.6",
+		"vsce": "1.53.2",
+		"vscode": "^1.1.33",
+		"vscode-debugadapter-testsupport": "1.33.0"
+	},
+	"main": "./out/extension",
+	"activationEvents": [
+		"onDebug",
+		"onCommand:extension.bbc-emulator-debugger.getProgramName",
+		"onCommand:bbc-emulator.disassemble"
+	],
+	"contributes": {
+		"breakpoints": [
+			{
+				"language": "markdown"
+			}
+		],
+		"debuggers": [
+			{
+				"type": "bbc_emulator",
+				"label": "BBC Emulator Debug",
+				"program": "./out/debugAdapter.js",
+				"runtime": "node",
+				"configurationAttributes": {
+					"launch": {
+						"required": [
+							"program"
+						],
+						"properties": {
+							"program": {
+								"type": "string",
+								"description": "Absolute path to a text file.",
+								"default": "${workspaceFolder}/${command:AskForProgramName}"
+							},
+							"stopOnEntry": {
+								"type": "boolean",
+								"description": "Automatically stop after launch.",
+								"default": true
+							},
+							"trace": {
+								"type": "boolean",
+								"description": "Enable logging of the Debug Adapter Protocol.",
+								"default": true
+							}
+						}
+					}
+				},
+				"initialConfigurations": [
+					{
+						"type": "bbc_emulator",
+						"request": "launch",
+						"name": "BBC Emulator Debugger",
+						"program": "${workspaceFolder}/readme.md",
+						"stopOnEntry": true,
+						"debugServer": 4711
+					}
+				],
+				"configurationSnippets": [
+					{
+						"label": "BBC Emulator Debugger: Launch",
+						"description": "A new configuration for 'debugging' a user selected markdown file.",
+						"body": {
+							"type": "bbc_emulator",
+							"request": "launch",
+							"name": "Ask for file name",
+							"program": "^\"\\${workspaceFolder}/\\${command:AskForProgramName}\"",
+							"stopOnEntry": true
+						}
+					}
+				],
+				"variables": {
+					"AskForProgramName": "extension.bbc-emulator-debugger.getProgramName"
+				}
+			}
+		],
+		"commands": [
+			{
+				"command": "bbc-emulator.disassemble",
+				"title": "BBC Emulator: Disassemble memory",
+				"description": "Disassemble memory"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "bbc-emulator.disassemble",
+				"key": "f2"
+			}
+		]
+	}
+}
