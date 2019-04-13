@@ -55,13 +55,35 @@
 	"main": "./out/extension",
 	"activationEvents": [
 		"onDebug",
+		"onLanguage:6502",
 		"onCommand:extension.bbc-emulator-debugger.getProgramName",
 		"onCommand:bbc-emulator.disassemble"
 	],
 	"contributes": {
+		"languages": [
+			{
+				"id": "6502",
+				"aliases": [
+					"6502-Assembly",
+					"6502"
+				],
+				"extensions": [
+					".6502",
+					".asm"
+				],
+				"configuration": "./6502-language.configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "6502",
+				"scopeName": "source.asm.6502",
+				"path": "./syntaxes/6502.tmLanguage"
+			}
+		],
 		"breakpoints": [
 			{
-				"language": "markdown"
+				"language": "6502"
 			}
 		],
 		"debuggers": [
@@ -99,7 +121,7 @@
 						"type": "bbc_emulator",
 						"request": "launch",
 						"name": "BBC Emulator Debugger",
-						"program": "${workspaceFolder}/readme.md",
+						"program": "${workspaceFolder}\\_session.6502",
 						"stopOnEntry": true,
 						"debugServer": 4711
 					}

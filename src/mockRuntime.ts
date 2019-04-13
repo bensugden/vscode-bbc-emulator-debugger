@@ -106,7 +106,7 @@ export class MockRuntime extends EventEmitter {
 		let bps = this._breakPoints.get(path);
 		if (!bps) {
 			bps = new Array<MockBreakpoint>();
-			this._breakPoints.set(path, bps);
+			this._breakPoints.set(path.toLocaleLowerCase(), bps);
 		}
 		bps.push(bp);
 
@@ -119,7 +119,7 @@ export class MockRuntime extends EventEmitter {
 	 * Clear breakpoint in file with given line.
 	 */
 	public clearBreakPoint(path: string, line: number) : MockBreakpoint | undefined {
-		let bps = this._breakPoints.get(path);
+		let bps = this._breakPoints.get(path.toLocaleLowerCase());
 		if (bps) {
 			const index = bps.findIndex(bp => bp.line === line);
 			if (index >= 0) {
@@ -175,7 +175,7 @@ export class MockRuntime extends EventEmitter {
 	}
 
 	private verifyBreakpoints(path: string) : void {
-		let bps = this._breakPoints.get(path);
+		let bps = this._breakPoints.get(path.toLocaleLowerCase());
 		if (bps) {
 			this.loadSource(path);
 			bps.forEach(bp => {
@@ -222,7 +222,7 @@ export class MockRuntime extends EventEmitter {
 		}
 
 		// is there a breakpoint?
-		const breakpoints = this._breakPoints.get(this._sourceFile);
+		const breakpoints = this._breakPoints.get(this._sourceFile.toLocaleLowerCase());
 		if (breakpoints) {
 			const bps = breakpoints.filter(bp => bp.line === ln);
 			if (bps.length > 0) {
